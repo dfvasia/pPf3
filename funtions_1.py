@@ -1,6 +1,7 @@
 import os
 from os.path import abspath, dirname
 import json
+import models
 
 
 def find_files(dir_find, type_file='.html'):
@@ -17,20 +18,20 @@ def find_files(dir_find, type_file='.html'):
 
 def open_file(files, mode, code, id_l=0, new_file=0):
     """
-
-    :param files:
-    :param mode:
-    :param code:
-    :param id_l:
-    :param new_file:
-    :return:
+    Открытие файла и выполнение заданных действий
+    :param files:Имя файла
+    :param mode: метод чтение файла
+    :param code: кодировка файла
+    :param id_l: метод обработки файла
+    :param new_file: куда записывать изменение файла
+    :return: вывод результата
     """
     with open(files, mode, encoding=code) as file:
         if id_l == 0:
             return json.load(file)
         if id_l == 1:
             return file.read()
-        if id_l == 2:
+        if id_l == 2 and new_file != 0:
             file.write(new_file)
             print(files)
 
@@ -48,6 +49,26 @@ def actual_ver_file(templates_img, read_method, list_name, find_text, replace_te
     """
     for f in list_name:
         old_file = open_file(templates_img[1:] + f, read_method[0], "utf-8", 1)
-        new_file = old_file.replace( find_text, replace_text)
-        open_file(templates_img[1:] + f, read_method[1], "utf-8", 2, new_file)
+        if replace_text not in old_file:
+            new_file = old_file.replace( find_text, replace_text)
+            open_file(templates_img[1:] + f, read_method[1], "utf-8", 2, new_file)
+        else:
+            print('Файл был уже изменен.')
     return "Готово"
+
+
+def person_data(file_name, mode, code):
+
+    person_list = []
+    dict_p_data = open_file(file_name, mode, code)
+    for k in dict_p_data:
+        person_list.append(models.User_web(
+            id_p=k["pk"],
+            name=k["poster_name"],
+            content=k["content"],
+            avatar=k["poster_avatar"],
+            picture_url=k["pic"],
+            views_count=k["views_count"],
+            likes_count=k["likes_count"],
+        ))
+    return person_list
