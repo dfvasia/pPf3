@@ -3,13 +3,12 @@ import funtions_1
 
 templates_img = '/templates/'
 read_method = ["r", "w", "a"]
+find_text = '<img src="img'
+replace_text = '<img src="/static/img'
 
-list_f, dir_o = funtions_1.find_files(templates_img)
+list_f, _ = funtions_1.find_files(templates_img)
+funtions_1.actual_ver_file(templates_img, read_method, list_f, find_text, replace_text)
 
-
-for f in list_f:
-     old_file = funtions_1.open_file(templates_img[1:] + f, read_method[0], "utf-8", 1)
-     new_file = old_file.replace('<img src="img', '<img src="/static/img')
 
 
 
