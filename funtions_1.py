@@ -16,6 +16,15 @@ def find_files(dir_find, type_file='.html'):
 
 
 def open_file(files, mode, code, id_l=0, new_file=0):
+    """
+
+    :param files:
+    :param mode:
+    :param code:
+    :param id_l:
+    :param new_file:
+    :return:
+    """
     with open(files, mode, encoding=code) as file:
         if id_l == 0:
             return json.load(file)
