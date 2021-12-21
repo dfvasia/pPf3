@@ -36,7 +36,6 @@ def open_file(files, mode, code, id_l=0, new_file=0):
             print(files)
 
 
-
 def actual_ver_file(templates_img, read_method, list_name, find_text, replace_text):
     """
     Поиск в списке файлов и изм. их.
@@ -50,7 +49,7 @@ def actual_ver_file(templates_img, read_method, list_name, find_text, replace_te
     for f in list_name:
         old_file = open_file(templates_img[1:] + f, read_method[0], "utf-8", 1)
         if replace_text not in old_file:
-            new_file = old_file.replace( find_text, replace_text)
+            new_file = old_file.replace(find_text, replace_text)
             open_file(templates_img[1:] + f, read_method[1], "utf-8", 2, new_file)
         else:
             print('Файл был уже изменен.')
@@ -58,7 +57,6 @@ def actual_ver_file(templates_img, read_method, list_name, find_text, replace_te
 
 
 def person_data(file_name, mode, code):
-
     person_list = []
     dict_p_data = open_file(file_name, mode, code)
     for k in dict_p_data:

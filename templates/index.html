@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SKYPROGRAM</title>
-  <link href="/static/css/styles.min.css" rel="stylesheet">
+  <link href="{{ url_for('static',filename='css/styles.min.css') }}" rel="stylesheet">
 </head>
 
 <body>
@@ -34,7 +34,7 @@
             <span class="item__username">{{candidate.name}}</span>
           </a>
         </div>
-        <a href="/post.html" class="item__post-link">
+        <a href="/post_p/{{candidate.id_p}}" class=tem__post-link">
           <img src="{{candidate.picture}}" alt="" width="348" class="item__post-img">
         </a>
         <p class="item__descr">{{candidate.content}}</p>
@@ -46,7 +46,7 @@
           </div>
         </div>
         <div class="item__post-bottom">
-          <a href="/post.html" class="item__btn-more">Подробнее</a>
+          <a href="/post_p/{{candidate.id_p}}" class="item__btn-more">Подробнее</a>
           <button type="button" class="item__bookmark-btn">
             <img src="/static/img/bookmark.png" alt="" class="item__bookmark-icon" width="24">
           </button>
