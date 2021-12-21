@@ -29,7 +29,7 @@ def index_website():
             "views_count": candidate.views_count,
             "likes_count": candidate.likes_count,
         })
-    return render_template('index.html',list_person=temp_dict)
+    return render_template('index.html',list_person=temp_dict, )
 
 
 @app.route('/bookmarks.html')
@@ -42,8 +42,8 @@ def user_feed_website():
     return render_template('/user-feed.html')
 
 
-@app.route('/post.html')
-def post_website():
+@app.route('/post/<int:post_id>')
+def post_website(post_id):
     return render_template('/post.html')
 
 
