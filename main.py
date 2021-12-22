@@ -14,7 +14,6 @@ user_data_json = funtions_1.person_data(people_list, read_method[0], "utf-8")
 funtions_1.add_person_data_comm_from_file(user_data_json, data_json, read_method[0], "utf-8")
 
 
-
 app = Flask(__name__)
 
 
@@ -47,47 +46,64 @@ def user_feed_website():
 
 @app.route('/search/')
 def p_search():
-    p_search = request.args.get("s")
-    list_person = person_data_user
-    temp_search = {}
-    if p_search:
-        if settings_app["case-sensitive"] is False:
-            p_s = p_search.lower()
-            for person in list_person:
-                if p_s in person.name.lower():
-                    temp_search[person.id_p] = person.name
-        else:
-            for person in list_person:
-                if p_search in person.name:
-                    temp_search[person.id_p] = person.name
+    c_search = request.args.get("s")
+    big_word = request.args.get("big_word")
+    temp_search = []
+    if c_search:
+        if bool(big_word) is False:
+            c_search = c_search.lower()
+            for content in user_data_json:
+                if c_search in content.content:
+                    temp_search.append({
+                        "id_p": int(content.id_p),
+                        "name": content.name,
+                        "picture": content.picture_url,
+                        "content": content.content[:30] + "...",
+                        "views_count": content.views_count,
+                        "count_comments": len(content.comment),
+                    })
+        for content in user_data_json:
+            if c_search in content.content.lower():
+                temp_search.append({
+                    "id_p": int(content.id_p),
+                    "name": content.name,
+                    "picture": content.picture_url,
+                    "content": content.content[:30] + "...",
+                    "views_count": content.views_count,
+                    "count_comments": len(content.comment),
+                })
+        count_search = len(temp_search)
+    else:
+        count_search = None
 
-    return render_template("search.html", p_search=temp_search, temp_search=temp_search)
+    return render_template("search.html", count_search=count_search,
+                           p_search=temp_search,
+                           temp_search=temp_search,
+                           list_person=temp_search)
 
 
 @app.route('/post_p/<int:post_id>')
 def post_website(post_id):
     if 0 < post_id <= len(user_data_json):
-        for user_data in user_data_json:
-            post_id_t = post_id - 1
-            print(post_id, '---', user_data.id_p, '---', len(user_data_json))
-            data_user_name = user_data_json[post_id_t].name
-            data_user_picture = user_data_json[post_id_t].picture_url
-            data_user_avatar = user_data_json[post_id_t].avatar
-            data_user_content = user_data_json[post_id_t].content
-            data_user_views_count = user_data_json[post_id_t].views_count
-            data_user_likes_count = user_data_json[post_id_t].likes_count
-            data_user_comments = user_data_json[post_id_t].comment
-            return render_template('/post.html',
-                                   data_user_name=data_user_name,
-                                   data_user_picture=data_user_picture,
-                                   data_user_avatar=data_user_avatar,
-                                   data_user_content=data_user_content,
-                                   data_user_views_count=data_user_views_count,
-                                   data_user_likes_count=data_user_likes_count,
-                                   post_id=post_id,
-                                   data_user_comments=data_user_comments,
-                                   count_comments=len(data_user_comments)
-                                   )
+        post_id_t = post_id - 1
+        data_user_name = user_data_json[post_id_t].name
+        data_user_picture = user_data_json[post_id_t].picture_url
+        data_user_avatar = user_data_json[post_id_t].avatar
+        data_user_content = user_data_json[post_id_t].content
+        data_user_views_count = user_data_json[post_id_t].views_count
+        data_user_likes_count = user_data_json[post_id_t].likes_count
+        data_user_comments = user_data_json[post_id_t].comment
+        return render_template('/post.html',
+                               data_user_name=data_user_name,
+                               data_user_picture=data_user_picture,
+                               data_user_avatar=data_user_avatar,
+                               data_user_content=data_user_content,
+                               data_user_views_count=data_user_views_count,
+                               data_user_likes_count=data_user_likes_count,
+                               post_id=post_id,
+                               data_user_comments=data_user_comments,
+                               count_comments=len(data_user_comments)
+                               )
     return redirect("http://127.0.0.1:5000/404", code=302)
 
 

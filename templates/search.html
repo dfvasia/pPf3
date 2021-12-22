@@ -24,13 +24,19 @@
     </div>
   </header>
   <main class="container">
-    <div class="search">
-      <form action="/" class="search__form">
-        <input type="search" class="search__input">
-      </form>
-      <p class="search__results">Найдено постов: 11</p>
-    </div>
-    <section class="items">
+    <form name="search" class="search__form" method="GET">
+      <input type="search" name="s" class="search__input">
+      {% if big_word is true %}
+      <input type="checkbox" name="big_word" value = "1" checked=true>учитывать регистр
+      {% else %}
+      <input type="checkbox" name="big_word" value = "0" >учитывать регистр
+      {% endif %}
+      {% if count_search is not none %}
+      <p class="search__results">Найдено постов: {{count_search}}</p>
+      {% else %}
+      <p class="search__results"> </p>
+      {% endif %}
+      <section class="items">
       <div class="items__item item">
         <div class="item__top">
           <a href="/user-feed.html" class="item__head">
