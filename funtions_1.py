@@ -70,3 +70,13 @@ def person_data(file_name, mode, code):
             likes_count=k["likes_count"],
         ))
     return person_list
+
+
+def add_person_data_comm_from_file(user_data, file_name, mode, code):
+    json_p_comm = open_file(file_name, mode, code)
+    for u in user_data:
+        for m in json_p_comm:
+            if u.id_p == m["post_id"]:
+                u.add_comment(m["commenter_name"], m["comment"], m["pk"])
+    else:
+        return "ПЛОХО"
