@@ -58,12 +58,12 @@
               </p>
           {% endfor %}
           </div>
-          <form action="/" class="item__comment-form comment-form">
+          <form action="/post_p/{{post_id}}" class="item__comment-form comment-form" method="post">
             <div class="comment-form__input-wrap">
-              <input type="search" class="comment-form__input" placeholder="Ваше имя">
+              <input type="search" class="comment-form__input" placeholder="Ваше имя" name="web_name">
             </div>
             <div class="comment-form__input-wrap">
-              <textarea class="comment-form__textarea" placeholder="Ваш комментарий" rows="6"></textarea>
+              <textarea class="comment-form__textarea" placeholder="Ваш комментарий" rows="6" name="web_content"></textarea>
             </div>
             <button type="submit" class="comment-form__btn">Отправить</button>
           </form>

@@ -34,6 +34,11 @@ def open_file(files, mode, code, id_l=0, new_file=0):
         if id_l == 2 and new_file != 0:
             file.write(new_file)
             print(files)
+        if id_l == 3 and new_file != 0:
+            json.dump(new_file, file, ensure_ascii=False, indent=4)
+            print(files)
+
+
 
 
 def actual_ver_file(templates_img, read_method, list_name, find_text, replace_text):
@@ -57,6 +62,14 @@ def actual_ver_file(templates_img, read_method, list_name, find_text, replace_te
 
 
 def person_data(file_name, mode, code):
+    """
+
+
+    :param file_name:
+    :param mode: метод чтение файла
+    :param code: кодировка файла
+    :return:
+    """
     person_list = []
     dict_p_data = open_file(file_name, mode, code)
     for k in dict_p_data:
@@ -73,10 +86,42 @@ def person_data(file_name, mode, code):
 
 
 def add_person_data_comm_from_file(user_data, file_name, mode, code):
+    """
+    обработка коммен. из архива
+
+    :param user_data: куда добавлять будем
+    :param file_name: файл с комментариями архив
+    :param mode: метод чтение файла
+    :param code: кодировка файла
+    :return: результат
+    """
     json_p_comm = open_file(file_name, mode, code)
     for u in user_data:
         for m in json_p_comm:
             if u.id_p == m["post_id"]:
                 u.add_comment(m["commenter_name"], m["comment"], m["pk"])
-    else:
-        return "ПЛОХО"
+
+
+def add_person_data_comm_from_web(web_post, file_name, mode, code):
+    """
+    обработка коммен. из формы веб
+
+    :param user_data: куда добавлять будем
+    :param file_name: файл с комментариями архив
+    :param mode: метод чтение файла
+    :param code: кодировка файла
+    :return: результат
+    """
+    json_p_comm_archive = open_file(file_name, mode[0], code)
+    json_p_comm_archive.append(web_post)
+    open_file(file_name, mode[1], code, 3, json_p_comm_archive)
+    print(json_p_comm_archive)
+
+
+    # def open_file(files, mode, code, id_l=0, new_file=0):
+    # for u in user_web:
+    #     for m in json_p_comm_archive:
+    #         if u.id_p == m["post_id"]:
+    #             u.add_comment(m["commenter_name"], m["comment"], m["pk"])
+    return "add_person_data_comm_from_file отработала"
+

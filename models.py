@@ -1,4 +1,6 @@
 class User_web:
+    count_comments = 0
+
     def __init__(self, id_p, name, avatar, picture_url, content, views_count=0, likes_count=0):
         self.id_p = id_p
         self.name = name
@@ -10,6 +12,8 @@ class User_web:
         self.comment = []
 
     def add_comment(self, a_n, a_c, a_d):
+        self.count_comments = a_d
+        self.count_comments += 1
         return self.comment.append({"commenter_name": a_n, "comment": a_c, "pk": a_d})
 
     def __repr__(self):
@@ -17,3 +21,6 @@ class User_web:
 
     def __len__(self):
         return len(self.id_p)
+
+
+

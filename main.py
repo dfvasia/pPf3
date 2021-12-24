@@ -1,6 +1,8 @@
 import funtions_1
 from flask import Flask, request, render_template, redirect
 
+import models
+
 templates_img = '/templates/'
 read_method = ["r", "w", "a"]
 find_text = "/post/{{ id }}"
@@ -8,11 +10,12 @@ replace_text = "{{ url_for('templates',filename='post/{{ id }}') }}"
 people_list = 'data/data.json'
 data_json = 'data/comments.json'
 
+
 # list_f, _ = funtions_1.find_files(templates_img)
 # funtions_1.actual_ver_file(templates_img, read_method, list_f, find_text, replace_text)
 user_data_json = funtions_1.person_data(people_list, read_method[0], "utf-8")
 funtions_1.add_person_data_comm_from_file(user_data_json, data_json, read_method[0], "utf-8")
-
+print(models.User_web.count_comments)
 
 app = Flask(__name__)
 
@@ -34,14 +37,37 @@ def index_website():
     return render_template('index.html', list_person=temp_dict)
 
 
-@app.route('/bookmarks')
-def bookmarks_website():
-    return render_template('/bookmarks.html')
+@app.route('/list/')
+def list_p():
+    list_person = user_data_json
+    return render_template("list.html", list_person=list_person)
 
 
-@app.route('/user-feed')
-def user_feed_website():
-    return render_template('/user-feed.html')
+@app.route('/users/<username>')
+def bookmarks_website(username):
+    temp_search = []
+    if username:
+        username = username.lower()
+        for user_n in user_data_json:
+            if username in user_n.name:
+                temp_search.append({
+                    "id_p": int(user_n.id_p),
+                    "avatar": user_n.avatar,
+                    "name": user_n.name,
+                    "picture": user_n.picture_url,
+                    "content": user_n.content[:30] + "...",
+                    "views_count": user_n.views_count,
+                    "count_comments": len(user_n.comment),
+                })
+    return render_template("user-feed.html",
+                           p_search=temp_search,
+                           temp_search=temp_search,
+                           list_person=temp_search)
+
+
+# @app.route('/user-feed')
+# def user_feed_website():
+#     return render_template('user-feed.html')
 
 
 @app.route('/search/')
@@ -62,6 +88,8 @@ def p_search():
                         "views_count": content.views_count,
                         "count_comments": len(content.comment),
                     })
+                return render_template("search.html", count_search=len(temp_search),
+                                       p_search=temp_search)
         for content in user_data_json:
             if c_search in content.content.lower():
                 temp_search.append({
@@ -77,15 +105,25 @@ def p_search():
         count_search = None
 
     return render_template("search.html", count_search=count_search,
-                           p_search=temp_search,
-                           temp_search=temp_search,
-                           list_person=temp_search)
+                           p_search=temp_search)
 
 
-@app.route('/post_p/<int:post_id>')
+@app.route('/post_p/<int:post_id>', methods=['GET', 'POST'])
 def post_website(post_id):
+    post_id_t = post_id - 1
+    if request.method == 'POST':
+        web_post = {"post_id": post_id_t,
+                    "commenter_name": request.form.get("web_name"),
+                    "comment": request.form.get("web_content"),
+                    "pk": 1}
+        for u in user_data_json:
+            for m in web_post:
+                if u.id_p == m["post_id"]:
+                    u.add_comment(m["commenter_name"], m["comment"], m["pk"])
+        funtions_1.add_person_data_comm_from_web(web_post, data_json, read_method, "utf-8")
+
     if 0 < post_id <= len(user_data_json):
-        post_id_t = post_id - 1
+
         data_user_name = user_data_json[post_id_t].name
         data_user_picture = user_data_json[post_id_t].picture_url
         data_user_avatar = user_data_json[post_id_t].avatar
@@ -104,7 +142,8 @@ def post_website(post_id):
                                data_user_comments=data_user_comments,
                                count_comments=len(data_user_comments)
                                )
-    return redirect("http://127.0.0.1:5000/404", code=302)
+
+    return redirect("/404", code=302)
 
 
 @app.errorhandler(404)
