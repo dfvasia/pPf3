@@ -15,7 +15,6 @@ data_json = 'data/comments.json'
 # funtions_1.actual_ver_file(templates_img, read_method, list_f, find_text, replace_text)
 user_data_json = funtions_1.person_data(people_list, read_method[0], "utf-8")
 funtions_1.add_person_data_comm_from_file(user_data_json, data_json, read_method[0], "utf-8")
-print(models.User_web.count_comments)
 
 app = Flask(__name__)
 
@@ -112,14 +111,13 @@ def p_search():
 def post_website(post_id):
     post_id_t = post_id - 1
     if request.method == 'POST':
-        web_post = {"post_id": post_id_t,
+        web_post = {"post_id": post_id_t + 1,
                     "commenter_name": request.form.get("web_name"),
                     "comment": request.form.get("web_content"),
-                    "pk": 1}
+                    "pk": models.User_web.get_score()+1}
         for u in user_data_json:
-            for m in web_post:
-                if u.id_p == m["post_id"]:
-                    u.add_comment(m["commenter_name"], m["comment"], m["pk"])
+                if int(u.id_p) == int(web_post["post_id"]):
+                    u.add_comment(web_post["commenter_name"], web_post["comment"], web_post["pk"])
         funtions_1.add_person_data_comm_from_web(web_post, data_json, read_method, "utf-8")
 
     if 0 < post_id <= len(user_data_json):
@@ -152,3 +150,5 @@ def not_found_error(errors):
 
 
 app.run(debug=True)
+
+

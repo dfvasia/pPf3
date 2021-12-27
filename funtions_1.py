@@ -115,13 +115,5 @@ def add_person_data_comm_from_web(web_post, file_name, mode, code):
     json_p_comm_archive = open_file(file_name, mode[0], code)
     json_p_comm_archive.append(web_post)
     open_file(file_name, mode[1], code, 3, json_p_comm_archive)
-    print(json_p_comm_archive)
-
-
-    # def open_file(files, mode, code, id_l=0, new_file=0):
-    # for u in user_web:
-    #     for m in json_p_comm_archive:
-    #         if u.id_p == m["post_id"]:
-    #             u.add_comment(m["commenter_name"], m["comment"], m["pk"])
     return "add_person_data_comm_from_file отработала"
 

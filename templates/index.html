@@ -28,7 +28,7 @@
       {% for candidate in list_person %}
       <div class="items__item item">
         <div class="item__top">
-          <a href="/user-feed.html" class="item__head">
+          <a href="/users/{{ candidate.name }}" class="item__head">
             <div class="item__ava-wrap">
               <img src={{candidate.avatar}} alt="" class="item__ava" width="47">
             </div>

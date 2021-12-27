@@ -142,5 +142,35 @@
         "commenter_name": "gfd",
         "comment": "dfgd",
         "pk": 24
+    },
+    {
+        "post_id": 1,
+        "commenter_name": "44",
+        "comment": "4trt",
+        "pk": 25
+    },
+    {
+        "post_id": 1,
+        "commenter_name": "78",
+        "comment": "787",
+        "pk": 26
+    },
+    {
+        "post_id": 1,
+        "commenter_name": "6675",
+        "comment": "56756",
+        "pk": 27
+    },
+    {
+        "post_id": 1,
+        "commenter_name": "666",
+        "comment": "666",
+        "pk": 28
+    },
+    {
+        "post_id": 8,
+        "commenter_name": "Good",
+        "comment": "Круто",
+        "pk": 29
     }
 ]

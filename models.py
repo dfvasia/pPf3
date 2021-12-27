@@ -12,9 +12,13 @@ class User_web:
         self.comment = []
 
     def add_comment(self, a_n, a_c, a_d):
-        self.count_comments = a_d
-        self.count_comments += 1
+        User_web.count_comments += 1
         return self.comment.append({"commenter_name": a_n, "comment": a_c, "pk": a_d})
+
+    @staticmethod
+    def get_score():
+        print("Всего постов", User_web.count_comments+1)
+        return User_web.count_comments
 
     def __repr__(self):
         return f'{self.name}'
